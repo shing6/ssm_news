@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weihaicheng.dao.newsDao">
+
+	
+    <!-- 获取所有新闻 -->
+    <select id="queryNews"  resultType="xyNews">
+		select * from xy_item
+	</select>
+	
+	<!-- 获取所有分类 -->
+    <select id="queryCatalogs"  resultType="Catalog">
+		select * from catalog
+	</select>
+	
+	<!-- 获取分类下新闻 -->
+    <select id="queryNewsById" parameterType="Integer" resultType="xyNews">
+		select * from xy_item where catalogId = #{catalogId}
+	</select>
+	
+    <!-- 根据Id获取新闻 -->
+    <select id="queryNewById" parameterType="Integer" resultType="xyNews">
+		select * from xy_item where itemId = #{itemId}
+	</select>
+	
+	<!-- 登录-->
+    <select id="findUser" parameterType="String" resultType="User">
+		select * from user where username = #{username}  and password = #{password}
+	</select>
+	
+    <!-- 获取用户信息-->
+    <select id="getUserById" parameterType="Integer" resultType="User">
+		select * from user where userId = #{userId}  
+	</select>
+	
+    <!-- 根据新闻id获取评论-->
+    <select id="getCommentByitemId" parameterType="Integer" resultType="Comment">
+		select * from comment where itemId = #{itemId}  
+	</select>
+	
+    <!-- 联合查询获取新闻评论-->
+    <select id="getComment" parameterType="Integer" resultType="Commentbyuser">
+		select name,commentText,assit ,xy_item.Title,xy_item.ItemID from comment,user,xy_item where xy_item.itemID=#{itemId} and user.userId=comment.userId and xy_item.itemID=comment.itemID    
+	</select>
+	<!-- 添加评论 -->
+    <insert id="insertComment" parameterType="com.weihaicheng.po.Commentbyuser">
+        INSERT INTO comment(commentText,userId, itemID) value(#{commentText},#{userId},#{itemID})
+        
+    </insert>
+	<!-- 注册用户 -->
+     <insert id="register" parameterType="com.weihaicheng.po.User" >
+        INSERT INTO user(username,password) value(#{username},#{password})
+     </insert>
+    
+</mapper>
